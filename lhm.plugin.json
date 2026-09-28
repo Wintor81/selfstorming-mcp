@@ -1,0 +1,774 @@
+{
+  "identifier": "selfstorming",
+  "name": "Selfstorming",
+  "version": "1.0.0",
+  "description": "Curated marketing libraries and ideation for your AI: search 1,800+ award-winning campaigns, back ideas with 850+ sourced findings and 61 marketing laws, use creative, naming, hook and storytelling techniques and 52 frameworks, and run ideation, naming and hooks sessions saved to your Selfstorming account.",
+  "author": "Selfstorming",
+  "authorUrl": "https://www.selfstorming.com",
+  "homepage": "https://www.selfstorming.com/tools/mcp",
+  "cloudEndpoint": "https://www.selfstorming.com/api/mcp",
+  "category": "productivity",
+  "icon": "https://raw.githubusercontent.com/Wintor81/selfstorming-mcp/main/assets/icon.png",
+  "tags": [
+    "marketing",
+    "advertising",
+    "campaigns",
+    "creativity",
+    "ideation",
+    "branding",
+    "naming",
+    "strategy",
+    "research"
+  ],
+  "tools": [
+    {
+      "name": "search_campaigns",
+      "description": "Search Selfstorming's library of 1,800+ real award-winning advertising campaigns. Default mode \"hybrid\" is AI semantic search (understands concepts, moods and briefs - e.g. \"underdog sports stories\" or a project description); \"keyword\" is plain text match. Wrap a phrase in double quotes for verbatim match. Returns campaign cards with links to full breakdowns on selfstorming.com. Use this to find campaigns similar to a project, an idea territory or a creative reference.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 2,
+            "description": "What to look for - a topic, mood, mechanic, brand or a short project description. Quoted \"exact phrase\" forces verbatim match."
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "hybrid",
+              "keyword"
+            ],
+            "description": "hybrid = AI semantic search (default), keyword = plain text match"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Max results to return (default 10, max 20)"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "browse_campaigns",
+      "description": "Browse the campaign library with structured filters instead of a search query: by award (e.g. \"Cannes Lions 2026 Gold\" or just \"Cannes\" / \"Gold\"), year, brand, agency or industry segment. Use this for questions like \"what won Gold at Cannes this year\" or \"show me Nike campaigns\". Filters combine with AND.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "award": {
+            "type": "string",
+            "description": "Award filter, partial match on award strings like \"Cannes Lions 2026 Gold\" - \"cannes gold\" matches all Cannes Gold wins"
+          },
+          "year": {
+            "type": "integer",
+            "description": "Campaign year, e.g. 2026"
+          },
+          "brand": {
+            "type": "string",
+            "description": "Brand name, partial match"
+          },
+          "agency": {
+            "type": "string",
+            "description": "Agency name, partial match"
+          },
+          "segment": {
+            "type": "string",
+            "description": "Industry segment, partial match"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Max results (default 20, max 20)"
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Pagination offset (only the first 100 results are reachable - narrow the filters for more)"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_campaign",
+      "description": "Get the full Selfstorming breakdown of one campaign by slug (from search_campaigns / browse_campaigns results): brief, creative idea, mechanics + rationale, strategy technique + rationale, video analysis (scenes, voiceover, mood, craft) and deconstructed framework. Use this to study a reference campaign in depth or ground ideation in how a real campaign was built.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Campaign slug, e.g. \"nike-dream-crazy\""
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "list_hooks",
+      "description": "Browse Selfstorming's library of 360 hook techniques - proven ways to open an ad, a post or a video so people stop scrolling. Filter by search term or category. Each hook links to its full page (template, examples, why it works).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "description": "Filter by name, description or category"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category filter (matched as search if both provided)"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Max results (default 20, max 20)"
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Pagination offset (only the first 100 results are reachable - use search for more)"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "list_creative_techniques",
+      "description": "Browse Selfstorming's library of 100 creative techniques (campaign mechanics) - repeatable mechanisms behind great campaigns, e.g. \"Action movie\", \"Fake brand\", \"Reverse day\". Each links to its full page with examples and when-not-to-use guidance. Great for injecting a mechanic into ideation.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "description": "Filter by name or description"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Max results (default 20, max 20)"
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Pagination offset (only the first 100 results are reachable - use search for more)"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "list_naming_techniques",
+      "description": "Browse Selfstorming's library of 66 naming techniques - structured methods for inventing brand and product names (portmanteau, foreign borrowing, mythology…), each with real-world examples and a link to its full page. Use generate_names to actually generate names with these techniques.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "description": "Filter by name or description"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Max results (default 20, max 20)"
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Pagination offset (only the first 100 results are reachable - use search for more)"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "list_marketing_laws",
+      "description": "Browse Selfstorming's library of 60+ evidence-based marketing laws from Byron Sharp, the Ehrenberg-Bass Institute and behavioral science (Double Jeopardy, Mental Availability, Penetration Drives Growth…). Use get_marketing_law for the full evidence and implementation guide of one law. Ground strategy discussions in these instead of marketing folklore.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "description": "Filter by name, description or tag"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_marketing_law",
+      "description": "Get the full content of one marketing law by slug: what it says, where the evidence comes from, a case study, implementation guide and key takeaways. Use when discussing strategy so recommendations stand on evidence.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Law slug from list_marketing_laws, e.g. \"double-jeopardy-law\""
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "list_storytelling_techniques",
+      "description": "Browse Selfstorming's library of storytelling techniques - narrative structures and devices for ads, posts and brand films. Each links to its full page.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "description": "Filter by name, description or category"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Max results (default 20, max 20)"
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Pagination offset (only the first 100 results are reachable - use search for more)"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "list_strategy_techniques",
+      "description": "Browse Selfstorming's 50 creative strategy techniques - the strategy-level moves behind great campaigns (\"Turn the Brand Into a Movement\", \"Celebrate the Super-Fans\"…). These are the same names campaign breakdowns reference as their Strategy technique. Use get_strategy_technique for one technique's full how-to.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "description": "Filter by name or description"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_strategy_technique",
+      "description": "Get one creative strategy technique in full: what it is, a real campaign example, why it works, step-by-step how-to and when NOT to use it. Use when a campaign breakdown names a strategy technique or when picking the strategic route for a project.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Technique slug from list_strategy_techniques, e.g. \"celebrate-the-super-fans\""
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "list_ad_techniques",
+      "description": "Browse Selfstorming's Social Media Ad Techniques library: 17 ad ANGLES (the persuasion route - problem identification, social proof, us-vs-them…, mapped to awareness stages) and 35 ad FORMATS (the execution shape - lo-fi UGC, founder ad, carousel…, with cost level). Each links to its full page with ideal-for guidance. Pairs naturally with create_ad_test.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "angles",
+              "formats",
+              "both"
+            ],
+            "description": "Which half of the library (default both)"
+          },
+          "search": {
+            "type": "string",
+            "description": "Filter by name, description or awareness stage"
+          },
+          "stage": {
+            "type": "string",
+            "description": "Angles only: filter by awareness stage, e.g. \"unaware\", \"problem-aware\""
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "list_playlists",
+      "description": "Browse Selfstorming's curated campaign playlists (\"Netflix for ads\") - hand-picked collections like Cannes Lions winners, decade legends or themed sets. Use get_playlist for the campaigns inside one.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Playlist category filter"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_playlist",
+      "description": "Get one curated playlist by slug with all its campaigns in order, each linked to its full breakdown.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Playlist slug from list_playlists"
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "search_wisdom",
+      "description": "Semantic search over Selfstorming's Marketing Wisdom library: 470+ individually sourced findings mined from effectiveness research (Binet & Field, System1, Kantar, WARC, Ehrenberg-Bass, IPA, BetterBriefs and more) plus 61 marketing laws. Understands concepts, not just words - \"emotions in advertising\" finds the findings about feeling, right-brain features and emotional campaigns' profit effects. Every result carries its claim, the figure it turns on, the report and page it came from, and a link to the evidence. Use this when a recommendation needs a number, a study or a law behind it.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 200,
+            "description": "A question or topic in plain words - \"does brand consistency pay\", \"share of voice\", \"what celebrities deliver\". Typos are fine."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Max results (default 10, max 20)"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "stat",
+              "principle",
+              "example",
+              "warning",
+              "quote",
+              "law",
+              "definition"
+            ],
+            "description": "Keep only one kind of entry"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_wisdom_bite",
+      "description": "One Marketing Wisdom entry in full by slug: the claim, the finding, the figure, the source down to the page, a link to the chart, and the related findings from the same report. Use after search_wisdom when one result deserves the whole context.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Entry slug from a search_wisdom link, e.g. \"a-brand-character-outperforms-a-celebrity-on-almost-every\""
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "browse_wisdom",
+      "description": "Browse Marketing Wisdom by topic and kind instead of a query: \"all stats on Brand Strategy\", \"every marketing law about growth\", \"warnings in Paid Media\", \"the latest trends\". Call with no topic to see the current topic list - it grows as packs are added, so it is not repeated here. Use search_wisdom for open-ended questions.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string",
+            "description": "Topic name or slug, partial match - \"brand strategy\", \"ai\", \"paid media\""
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "stat",
+              "principle",
+              "example",
+              "warning",
+              "quote",
+              "law",
+              "definition"
+            ],
+            "description": "Keep only one kind of entry"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Max results (default 20, max 20)"
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Pagination offset (only the first 100 results are reachable - narrow by kind or use search_wisdom)"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "list_frameworks",
+      "description": "Browse Selfstorming's library of 52 marketing strategy frameworks (Brand Onion, Positioning Statement, Golden Circle, AIDA, Brand Archetypes…). Returns each framework with its primary use case and link. Use get_framework to pull one framework's full content into the conversation and apply it to a project.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "description": "Filter by name, use case or category"
+          },
+          "use_case": {
+            "type": "string",
+            "description": "Filter by use case, e.g. \"brand-strategy\", \"positioning\", \"campaign-planning\""
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_framework",
+      "description": "Load the full content of one strategy framework by slug: what it is, its components, step-by-step implementation guide, worked brand examples, pros/cons, common pitfalls and when (not) to use it. Then apply it to the user's brand/project in conversation - this is how you \"consult a framework\" on a strategy question.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Framework slug from list_frameworks, e.g. \"brand-onion\""
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "render_framework",
+      "description": "Render a strategy framework diagram FILLED with values for the user's brand and return it as an inline PNG image - like the site's Framework Generator, but in chat. First derive short values for each field from the conversation (call get_framework to see the field keys), then call this with slug + values. Follow up with your own explanation of what you filled in and why. Works for the 44 frameworks with fillable diagrams (SWOT, AIDA, Brand Onion, Positioning Statement, JTBD, Business Model Canvas…).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Framework slug from list_frameworks, e.g. \"swot\" or \"brand-onion\""
+          },
+          "values": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Field values keyed by the framework's field keys (see get_framework's \"Fill it visually\" section). Short phrases, ~5-12 words each."
+          },
+          "brand": {
+            "type": "string",
+            "description": "Brand or project name shown on the diagram, e.g. \"Acme Coffee\""
+          }
+        },
+        "required": [
+          "slug",
+          "values"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "create_ideation_session",
+      "description": "Run a Selfstorming Creative Ideation Session: generates campaign/content ideas grounded in the 1,800+ campaign library, 100 creative techniques and 360 hooks - not generic LLM brainstorming. Pass the project context as the brief. Choose output formats (big ideas, LinkedIn posts, TikTok/Reel scripts, claims, activations…) or leave \"auto\". The session is saved to the user's Selfstorming account and the returned link opens it as a visual board.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "brief": {
+            "type": "string",
+            "minLength": 10,
+            "description": "The creative brief / project context. The richer the brief, the better the ideas. Any language."
+          },
+          "brand": {
+            "type": "string",
+            "description": "Brand name (optional)"
+          },
+          "product": {
+            "type": "string",
+            "description": "Product or topic label (optional)"
+          },
+          "region": {
+            "type": "string",
+            "description": "Market/region, e.g. \"Slovakia\", \"Global\" (default Global)"
+          },
+          "language": {
+            "type": "string",
+            "description": "ISO 639-1 output language, e.g. \"en\", \"sk\" (default: language of the brief)"
+          },
+          "output_types": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "auto",
+                "big-ideas",
+                "story",
+                "linkedin-post",
+                "activation",
+                "claim",
+                "tiktok-reel",
+                "event-idea",
+                "insight",
+                "creative-strategy",
+                "headline",
+                "free"
+              ]
+            },
+            "description": "Output formats to generate (default [\"auto\"] - AI picks per idea). Mix formats freely, e.g. [\"big-ideas\",\"linkedin-post\",\"tiktok-reel\"]."
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20,
+            "description": "How many ideas (default 10, max 20)"
+          },
+          "brand_id": {
+            "type": "string",
+            "description": "Brand Studio brand id (from list_my_brands) - grounds ideas in the saved brand context: what it is, tone of voice, style rules"
+          }
+        },
+        "required": [
+          "brief"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "generate_more_ideas",
+      "description": "Generate another batch of ideas into an existing Selfstorming session (created via create_ideation_session / generate_names or in the web app). New ideas avoid duplicating what the session already has. Optionally steer the batch with a style brief or different output formats.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "session": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Session url-slug or id (from a previous tool call or list_my_sessions)"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20,
+            "description": "How many ideas (default 10, max 20)"
+          },
+          "style_brief": {
+            "type": "string",
+            "description": "Free-text steer for this batch, e.g. \"darker humor, gen-z tone\" or for naming \"nordic green tech vibes\""
+          },
+          "output_types": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "auto",
+                "big-ideas",
+                "story",
+                "linkedin-post",
+                "activation",
+                "claim",
+                "tiktok-reel",
+                "event-idea",
+                "insight",
+                "creative-strategy",
+                "headline",
+                "free"
+              ]
+            },
+            "description": "Override output formats for this batch only (campaign sessions)"
+          }
+        },
+        "required": [
+          "session"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "generate_names",
+      "description": "Generate brand/product name ideas using Selfstorming's 66 naming techniques - each name comes from a real technique (portmanteau, mythology, foreign borrowing…), not random LLM riffing. The naming session is saved to the user's account with a visual board link. Check name availability and trademarks separately before committing.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "product_category": {
+            "type": "string",
+            "minLength": 2,
+            "description": "What is being named, e.g. \"fintech app\", \"craft beer\", \"AI consultancy\""
+          },
+          "brief": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Naming brief: positioning, audience, vibe, constraints. Any language."
+          },
+          "brand": {
+            "type": "string",
+            "description": "Parent brand, if any"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20,
+            "description": "How many names (default 10, max 20)"
+          }
+        },
+        "required": [
+          "product_category",
+          "brief"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "generate_hooks",
+      "description": "Generate scroll-stopping hooks and headlines for social content using Selfstorming's 360 tested hook techniques - each hook comes from a named technique, not generic copywriting. Saved to the user's account as a hooks session with a board link.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "brief": {
+            "type": "string",
+            "minLength": 10,
+            "description": "What the content is about: topic, platform, audience, goal. Any language."
+          },
+          "brand": {
+            "type": "string",
+            "description": "Brand name (optional)"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20,
+            "description": "How many hooks (default 10, max 20)"
+          },
+          "brand_id": {
+            "type": "string",
+            "description": "Brand Studio brand id (from list_my_brands) for tone-of-voice grounding"
+          }
+        },
+        "required": [
+          "brief"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "list_my_brands",
+      "description": "List the user's saved Brand Studio brands (name, what it is, tone of voice). Pass a brand id into create_ideation_session, generate_hooks or create_ad_test via brand_id to ground generation in that brand's saved context (sessions created with a brand keep its context for generate_more_ideas automatically).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "list_my_sessions",
+      "description": "List the user's recent Selfstorming sessions (ideation and naming) with links - use to continue a session with generate_more_ideas or to point the user back to their boards.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 25,
+            "description": "Max sessions (default 10)"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "create_ad_test",
+      "description": "Run Selfstorming's Social Ad Studio from a URL or brief: derives a Hi5 creative strategy (5 personas x 5 desires x awareness stages) and composes a 3x3x3 paid-social ad test - 3 distinct concepts x 3 format variations x 3 hooks, built for Meta/TikTok creative diversification. The first concept comes back fully written (hooks, shot-by-shot scripts, statics, captions), the other two as previews - expand them with generate_ad_concept. Saved to the user's account with a studio link.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "brief": {
+            "type": "string",
+            "description": "Product/offer brief. May contain a URL - it will be crawled and the rest of the text steers the analysis."
+          },
+          "url": {
+            "type": "string",
+            "description": "Website URL to crawl for product/offer context (alternative to brief)"
+          },
+          "brand_id": {
+            "type": "string",
+            "description": "Brand Studio brand id (from list_my_brands) - adds brand context and can stand in for a crawl"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "generate_ad_concept",
+      "description": "Write one concept of an existing Social Ad Studio ad test in full: 3 format variations with hooks, shot-by-shot scripts, statics/carousel cards, CTAs and captions. Use after create_ad_test to expand the preview concepts, or with an instruction to rewrite one.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "session": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Studio session url-slug or id (from create_ad_test or list_my_sessions)"
+          },
+          "concept_no": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Which concept of the matrix to write (1-based)"
+          },
+          "instruction": {
+            "type": "string",
+            "description": "Optional steering, e.g. \"make it deadpan, no influencers\""
+          }
+        },
+        "required": [
+          "session",
+          "concept_no"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_ad_test",
+      "description": "Show an existing Social Ad Studio ad test: the Hi5 strategy plan, all concepts (full or preview) and the studio link.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "session": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Studio session url-slug or id"
+          }
+        },
+        "required": [
+          "session"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ],
+  "resources": [
+    {
+      "name": "about-selfstorming",
+      "description": "What Selfstorming is: libraries, tools and canonical links. Load for grounding when introducing Selfstorming or deciding which tool fits.",
+      "uri": "selfstorming://about"
+    }
+  ]
+}

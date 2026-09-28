@@ -1,0 +1,14 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.selfstorming/selfstorming",
+  "title": "Selfstorming",
+  "description": "Curated marketing libraries and ideation for your AI: 1,800+ award-winning campaigns and frameworks.",
+  "version": "1.0.0",
+  "websiteUrl": "https://www.selfstorming.com/tools/mcp",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://www.selfstorming.com/api/mcp"
+    }
+  ]
+}
